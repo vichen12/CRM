@@ -1,0 +1,531 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum RolTipo {
+  admin
+  vendedor_matriculado
+  vendedor_sin_matricula
+}
+
+enum LeadEstado {
+  nuevo
+  tomado
+  contactado
+  en_proceso
+  cotizado
+  cerrado
+  perdido
+}
+
+enum LeadOrigen {
+  web
+  referido
+  manual
+  campana
+  otro
+}
+
+enum LeadEventoTipo {
+  recibido
+  tomado
+  contacto_intento
+  contactado
+  reunion_agendada
+  reunion_realizada
+  cotizacion_enviada
+  venta_cerrada
+  perdido
+}
+
+enum VentaEstado {
+  vigente
+  cancelada
+  vencida
+}
+
+enum DocumentoTipo {
+  producto
+  cobertura
+  proceso
+  formulario
+  otro
+}
+
+enum NotificacionTipo {
+  lead_nuevo
+  noticia
+  ranking
+  recompensa
+  sistema
+}
+
+enum PeriodoTipo {
+  semanal
+  mensual
+  anual
+}
+
+enum RankingEstado {
+  pendiente
+  activo
+  cerrado
+}
+
+enum RecompensaTipo {
+  dinero
+  bono
+  premio
+  reconocimiento
+}
+
+enum CotizacionEstado {
+  enviada
+  aceptada
+  rechazada
+  vencida
+}
+
+enum ConsultaTipo {
+  nueva_poliza
+  renovacion
+  reclamo
+  informacion
+  otro
+}
+
+enum ConsultaEstado {
+  pendiente
+  en_proceso
+  resuelta
+  cancelada
+}
+
+// ============================================================
+// MODELOS
+// ============================================================
+
+model Zona {
+  id          String    @id @default(uuid())
+  nombre      String    @db.VarChar(100)
+  provincia   String    @db.VarChar(100)
+  pais        String    @default("Argentina") @db.VarChar(100)
+  descripcion String?
+  activa      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  profiles    Profile[]
+  leads       Lead[]
+
+  @@map("zonas")
+}
+
+model Profile {
+  id            String    @id @default(uuid())
+  email         String    @unique @db.VarChar(255)
+  passwordHash  String    @map("password_hash") @db.VarChar(255)
+  nombre        String    @db.VarChar(100)
+  apellido      String    @db.VarChar(100)
+  telefono      String?   @db.VarChar(50)
+  rol           RolTipo   @default(vendedor_sin_matricula)
+  zonaId        String?   @map("zona_id")
+  matricula     String?   @db.VarChar(100)
+  activo        Boolean   @default(true)
+  avatarUrl     String?   @map("avatar_url")
+  ultimoAcceso  DateTime? @map("ultimo_acceso")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  zona                 Zona?                @relation(fields: [zonaId], references: [id])
+  leadsAsignados       Lead[]               @relation("VendedorLeads")
+  leadActividades      LeadActividad[]
+  cotizaciones         Cotizacion[]
+  ventas               Venta[]
+  clientes             Cliente[]
+  consultas            Consulta[]
+  documentos           Documento[]
+  noticias             Noticia[]
+  notificaciones       Notificacion[]
+  kpisPeriodo          VendedorKpisPeriodo[]
+  stats                VendedorStats?
+  rankingResultados    RankingResultado[]
+  recompensasOtorgadas RecompensaOtorgada[]
+  refreshTokens        RefreshToken[]
+
+  @@map("profiles")
+}
+
+model Lead {
+  id            String     @id @default(uuid())
+  nombre        String     @db.VarChar(100)
+  apellido      String     @db.VarChar(100)
+  email         String?    @db.VarChar(255)
+  telefono      String     @db.VarChar(50)
+  zonaId        String?    @map("zona_id")
+  estado        LeadEstado @default(nuevo)
+  origen        LeadOrigen @default(manual)
+  vendedorId    String?    @map("vendedor_id")
+  notas         String?
+  tomadoAt      DateTime?  @map("tomado_at")
+  contactadoAt  DateTime?  @map("contactado_at")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  zona           Zona?           @relation(fields: [zonaId], references: [id])
+  vendedor       Profile?        @relation("VendedorLeads", fields: [vendedorId], references: [id])
+  actividades    LeadActividad[]
+  cotizaciones   Cotizacion[]
+  ventas         Venta[]
+  consultas      Consulta[]
+  notificaciones Notificacion[]
+
+  @@index([vendedorId])
+  @@index([zonaId])
+  @@index([estado])
+  @@index([createdAt(sort: Desc)])
+  @@map("leads")
+}
+
+model LeadActividad {
+  id          String         @id @default(uuid())
+  leadId      String         @map("lead_id")
+  vendedorId  String?        @map("vendedor_id")
+  tipo        LeadEventoTipo
+  notas       String?
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  vendedor    Profile? @relation(fields: [vendedorId], references: [id])
+
+  @@index([leadId])
+  @@index([tipo])
+  @@map("lead_actividad")
+}
+
+model Cotizacion {
+  id          String           @id @default(uuid())
+  leadId      String           @map("lead_id")
+  vendedorId  String           @map("vendedor_id")
+  compania    String?          @db.VarChar(100)
+  producto    String           @db.VarChar(150)
+  montoPrima  Decimal?         @map("monto_prima") @db.Decimal(12, 2)
+  descripcion String?
+  estado      CotizacionEstado @default(enviada)
+  fechaEnvio  DateTime         @default(now()) @map("fecha_envio")
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  lead        Lead    @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  vendedor    Profile @relation(fields: [vendedorId], references: [id])
+  ventas      Venta[]
+
+  @@index([leadId])
+  @@index([vendedorId])
+  @@map("cotizaciones")
+}
+
+model Venta {
+  id                 String      @id @default(uuid())
+  vendedorId         String      @map("vendedor_id")
+  leadId             String?     @map("lead_id")
+  clienteId          String?     @map("cliente_id")
+  cotizacionId       String?     @map("cotizacion_id")
+  producto           String      @db.VarChar(150)
+  compania           String?     @db.VarChar(100)
+  montoPrima         Decimal?    @map("monto_prima") @db.Decimal(12, 2)
+  montoComision      Decimal?    @map("monto_comision") @db.Decimal(12, 2)
+  porcentajeComision Decimal?    @map("porcentaje_comision") @db.Decimal(5, 2)
+  estado             VentaEstado @default(vigente)
+  fechaVenta         DateTime    @map("fecha_venta") @db.Date
+  fechaVencimiento   DateTime?   @map("fecha_vencimiento") @db.Date
+  notas              String?
+  createdAt          DateTime    @default(now()) @map("created_at")
+  updatedAt          DateTime    @updatedAt @map("updated_at")
+
+  vendedor   Profile     @relation(fields: [vendedorId], references: [id])
+  lead       Lead?       @relation(fields: [leadId], references: [id])
+  cliente    Cliente?    @relation(fields: [clienteId], references: [id])
+  cotizacion Cotizacion? @relation(fields: [cotizacionId], references: [id])
+
+  @@index([vendedorId])
+  @@index([fechaVenta(sort: Desc)])
+  @@index([estado])
+  @@map("ventas")
+}
+
+model Documento {
+  id          String        @id @default(uuid())
+  nombre      String        @db.VarChar(200)
+  descripcion String?
+  tipo        DocumentoTipo
+  url         String
+  storagePath String        @map("storage_path")
+  subidoPor   String        @map("subido_por")
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  subidor     Profile @relation(fields: [subidoPor], references: [id])
+
+  @@map("documentos")
+}
+
+model Noticia {
+  id           String   @id @default(uuid())
+  titulo       String   @db.VarChar(200)
+  contenido    String
+  imagenUrl    String?  @map("imagen_url")
+  publicadoPor String   @map("publicado_por")
+  activa       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  publicador     Profile        @relation(fields: [publicadoPor], references: [id])
+  notificaciones Notificacion[]
+
+  @@map("noticias")
+}
+
+model Notificacion {
+  id         String           @id @default(uuid())
+  titulo     String           @db.VarChar(200)
+  mensaje    String
+  tipo       NotificacionTipo
+  vendedorId String           @map("vendedor_id")
+  leadId     String?          @map("lead_id")
+  noticiaId  String?          @map("noticia_id")
+  leida      Boolean          @default(false)
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  vendedor Profile  @relation(fields: [vendedorId], references: [id], onDelete: Cascade)
+  lead     Lead?    @relation(fields: [leadId], references: [id])
+  noticia  Noticia? @relation(fields: [noticiaId], references: [id])
+
+  @@index([vendedorId, leida])
+  @@index([createdAt(sort: Desc)])
+  @@map("notificaciones")
+}
+
+model VendedorKpisPeriodo {
+  id                   String      @id @default(uuid())
+  perfilId             String      @map("perfil_id")
+  periodoTipo          PeriodoTipo @map("periodo_tipo")
+  periodoInicio        DateTime    @map("periodo_inicio") @db.Date
+  periodoFin           DateTime    @map("periodo_fin") @db.Date
+
+  leadsRecibidos       Int     @default(0) @map("leads_recibidos")
+  leadsTomados         Int     @default(0) @map("leads_tomados")
+  leadsContactados     Int     @default(0) @map("leads_contactados")
+  reunionesRealizadas  Int     @default(0) @map("reuniones_realizadas")
+  cotizacionesEnviadas Int     @default(0) @map("cotizaciones_enviadas")
+
+  ventasCerradas       Int     @default(0) @map("ventas_cerradas")
+  ventasPerdidas       Int     @default(0) @map("ventas_perdidas")
+
+  primaTotalVendida    Decimal @default(0) @map("prima_total_vendida") @db.Decimal(14, 2)
+  comisionGenerada     Decimal @default(0) @map("comision_generada") @db.Decimal(14, 2)
+  comisionPagada       Decimal @default(0) @map("comision_pagada") @db.Decimal(14, 2)
+
+  tasaContacto         Decimal @default(0) @map("tasa_contacto") @db.Decimal(5, 2)
+  tasaConversion       Decimal @default(0) @map("tasa_conversion") @db.Decimal(5, 2)
+  ticketPromedio       Decimal @default(0) @map("ticket_promedio") @db.Decimal(12, 2)
+  rentabilidad         Decimal @default(0) @db.Decimal(12, 2)
+
+  puntos               Decimal @default(0) @db.Decimal(10, 2)
+  posicionRanking      Int?    @map("posicion_ranking")
+
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  perfil               Profile @relation(fields: [perfilId], references: [id], onDelete: Cascade)
+
+  @@unique([perfilId, periodoTipo, periodoInicio])
+  @@index([perfilId])
+  @@index([periodoInicio(sort: Desc)])
+  @@map("vendedor_kpis_periodo")
+}
+
+model VendedorStats {
+  perfilId            String   @id @map("perfil_id")
+
+  leadsTotales        Int      @default(0) @map("leads_totales")
+  leadsContactados    Int      @default(0) @map("leads_contactados")
+  reunionesTotales    Int      @default(0) @map("reuniones_totales")
+  cotizacionesTotales Int      @default(0) @map("cotizaciones_totales")
+
+  ventasTotales       Int      @default(0) @map("ventas_totales")
+  ventasPerdidas      Int      @default(0) @map("ventas_perdidas")
+
+  primaTotal          Decimal  @default(0) @map("prima_total") @db.Decimal(14, 2)
+  comisionesTotales   Decimal  @default(0) @map("comisiones_totales") @db.Decimal(14, 2)
+
+  tasaConversionTotal Decimal  @default(0) @map("tasa_conversion_total") @db.Decimal(5, 2)
+  ticketPromedio      Decimal  @default(0) @map("ticket_promedio") @db.Decimal(12, 2)
+
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  perfil              Profile  @relation(fields: [perfilId], references: [id], onDelete: Cascade)
+
+  @@map("vendedor_stats")
+}
+
+model RankingConfig {
+  id                   String   @id @default(uuid())
+  nombre               String   @default("default") @db.VarChar(100)
+  pesoVentas           Decimal  @default(10)    @map("peso_ventas") @db.Decimal(6, 2)
+  pesoLeadsContactados Decimal  @default(1)     @map("peso_leads_contactados") @db.Decimal(6, 2)
+  pesoConversion       Decimal  @default(5)     @map("peso_conversion") @db.Decimal(6, 2)
+  pesoTicketPromedio   Decimal  @default(0.001) @map("peso_ticket_promedio") @db.Decimal(6, 3)
+  pesoReuniones        Decimal  @default(2)     @map("peso_reuniones") @db.Decimal(6, 2)
+  activa               Boolean  @default(true)
+  createdAt            DateTime @default(now()) @map("created_at")
+
+  periodos             RankingPeriodo[]
+
+  @@map("ranking_config")
+}
+
+model RankingPeriodo {
+  id              String        @id @default(uuid())
+  nombre          String        @db.VarChar(150)
+  fechaInicio     DateTime      @map("fecha_inicio") @db.Date
+  fechaFin        DateTime      @map("fecha_fin") @db.Date
+  estado          RankingEstado @default(pendiente)
+  rankingConfigId String?       @map("ranking_config_id")
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  config               RankingConfig?       @relation(fields: [rankingConfigId], references: [id])
+  resultados           RankingResultado[]
+  recompensasOtorgadas RecompensaOtorgada[]
+
+  @@map("ranking_periodos")
+}
+
+model RankingResultado {
+  id               String   @id @default(uuid())
+  rankingPeriodoId String   @map("ranking_periodo_id")
+  perfilId         String   @map("perfil_id")
+
+  puntos           Decimal  @default(0) @db.Decimal(10, 2)
+  posicion         Int?
+
+  ventas           Int      @default(0)
+  leadsContactados Int      @default(0) @map("leads_contactados")
+  tasaConversion   Decimal  @default(0) @map("tasa_conversion") @db.Decimal(5, 2)
+  comisionGenerada Decimal  @default(0) @map("comision_generada") @db.Decimal(14, 2)
+  primaTotal       Decimal  @default(0) @map("prima_total") @db.Decimal(14, 2)
+
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  periodo          RankingPeriodo @relation(fields: [rankingPeriodoId], references: [id], onDelete: Cascade)
+  perfil           Profile        @relation(fields: [perfilId], references: [id], onDelete: Cascade)
+
+  @@unique([rankingPeriodoId, perfilId])
+  @@index([rankingPeriodoId])
+  @@index([posicion])
+  @@map("ranking_resultados")
+}
+
+model Recompensa {
+  id          String         @id @default(uuid())
+  nombre      String         @db.VarChar(150)
+  descripcion String?
+  tipo        RecompensaTipo
+  valor       Decimal?       @db.Decimal(12, 2)
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  otorgadas   RecompensaOtorgada[]
+
+  @@map("recompensas")
+}
+
+model RecompensaOtorgada {
+  id               String    @id @default(uuid())
+  perfilId         String    @map("perfil_id")
+  rankingPeriodoId String?   @map("ranking_periodo_id")
+  recompensaId     String    @map("recompensa_id")
+  posicion         Int?
+  pagada           Boolean   @default(false)
+  fechaPago        DateTime? @map("fecha_pago")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  perfil         Profile         @relation(fields: [perfilId], references: [id])
+  rankingPeriodo RankingPeriodo? @relation(fields: [rankingPeriodoId], references: [id])
+  recompensa     Recompensa      @relation(fields: [recompensaId], references: [id])
+
+  @@map("recompensas_otorgadas")
+}
+
+// ============================================================
+// CLIENTES (cartera propia del vendedor)
+// ============================================================
+
+model Cliente {
+  id              String    @id @default(uuid())
+  vendedorId      String    @map("vendedor_id")
+  nombre          String    @db.VarChar(100)
+  apellido        String    @db.VarChar(100)
+  email           String?   @db.VarChar(255)
+  telefono        String    @db.VarChar(50)
+  direccion       String?
+  localidad       String?
+  provincia       String?
+  fechaNacimiento DateTime? @map("fecha_nacimiento") @db.Date
+  notas           String?
+  activo          Boolean   @default(true)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  vendedor    Profile      @relation(fields: [vendedorId], references: [id])
+  consultas   Consulta[]
+  ventas      Venta[]
+
+  @@index([vendedorId])
+  @@index([apellido])
+  @@map("clientes")
+}
+
+// ============================================================
+// CONSULTAS (seguimiento de interacciones)
+// ============================================================
+
+model Consulta {
+  id          String         @id @default(uuid())
+  vendedorId  String         @map("vendedor_id")
+  clienteId   String?        @map("cliente_id")
+  leadId      String?        @map("lead_id")
+  tipo        ConsultaTipo   @default(informacion)
+  estado      ConsultaEstado @default(pendiente)
+  descripcion String
+  resolucion  String?
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  vendedor    Profile   @relation(fields: [vendedorId], references: [id])
+  cliente     Cliente?  @relation(fields: [clienteId], references: [id])
+  lead        Lead?     @relation(fields: [leadId], references: [id])
+
+  @@index([vendedorId])
+  @@index([clienteId])
+  @@index([estado])
+  @@map("consultas")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  perfilId  String   @map("perfil_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  revocado  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  perfil    Profile  @relation(fields: [perfilId], references: [id], onDelete: Cascade)
+
+  @@index([perfilId])
+  @@map("refresh_tokens")
+}

@@ -66,7 +66,7 @@ export function PodiumCard({ ranking, position }: PodiumCardProps) {
         <Icon className="h-5 w-5 text-white" />
       </div>
 
-      {/* Avatar */}
+      {/* Avatar1 */}
       <div className="relative mb-3">
         {avatarUrl ? (
           <img

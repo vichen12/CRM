@@ -14,14 +14,15 @@ const sizeClasses: Record<string, string> = {
 export function Spinner({ size = 'md', className }: SpinnerProps) {
   return (
     <svg
-      className={cn('animate-spin text-blue-600', sizeClasses[size], className)}
+      className={cn('animate-spin', sizeClasses[size], className)}
+      style={{ color: '#4A90D9' }}
       fill="none"
       viewBox="0 0 24 24"
       aria-hidden="true"
     >
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <circle className="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
       <path
-        className="opacity-75"
+        className="opacity-80"
         fill="currentColor"
         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
       />

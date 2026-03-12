@@ -38,19 +38,19 @@ function SectionCard({
 }) {
   return (
     <div
-      className="bg-white rounded-2xl overflow-hidden"
-      style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}
+      className="rounded-xl overflow-hidden"
+      style={{ background: '#0C1628', border: '1px solid rgba(255,255,255,0.07)' }}
     >
-      <div className="px-6 py-5 flex items-center gap-4" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+      <div className="px-6 py-5 flex items-center gap-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: `${iconColor}15` }}
+          style={{ background: `${iconColor}18` }}
         >
           <Icon className="h-5 w-5" style={{ color: iconColor }} />
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-zinc-800">{title}</h2>
-          <p className="text-xs text-zinc-400 mt-0.5">{subtitle}</p>
+          <h2 className="text-sm font-semibold" style={{ color: '#EEF2FF' }}>{title}</h2>
+          <p className="text-xs mt-0.5" style={{ color: '#2C3E55' }}>{subtitle}</p>
         </div>
       </div>
       <div className="p-6">{children}</div>
@@ -79,13 +79,13 @@ function InputField({
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1.5">
+      <label className="block text-xs font-medium uppercase tracking-widest mb-1.5" style={{ color: '#2C3E55', letterSpacing: '0.08em' }}>
         {label}
       </label>
       <div className="relative">
         {Icon && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2">
-            <Icon className="h-4 w-4 text-zinc-400" />
+            <Icon className="h-4 w-4" style={{ color: '#2C3E55' }} />
           </div>
         )}
         <input
@@ -94,23 +94,25 @@ function InputField({
           onChange={(e) => onChange?.(e.target.value)}
           placeholder={placeholder}
           disabled={disabled}
-          className="w-full py-2.5 text-sm text-zinc-800 bg-zinc-50 rounded-xl outline-none transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full py-2.5 text-sm rounded-xl outline-none transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{
             paddingLeft: Icon ? '2.5rem' : '0.875rem',
             paddingRight: rightElement ? '3rem' : '0.875rem',
-            border: '1px solid rgba(0,0,0,0.08)',
+            background: '#12213A',
+            border: '1px solid rgba(255,255,255,0.07)',
+            color: '#EEF2FF',
           }}
           onFocus={(e) => {
             if (!disabled) {
-              ;(e.currentTarget as HTMLElement).style.borderColor = '#2A79C2'
-              ;(e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 3px rgba(42,121,194,0.1)'
-              ;(e.currentTarget as HTMLElement).style.background = 'white'
+              const el = e.currentTarget
+              el.style.borderColor = '#4A90D9'
+              el.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)'
             }
           }}
           onBlur={(e) => {
-            ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,0,0,0.08)'
-            ;(e.currentTarget as HTMLElement).style.boxShadow = ''
-            ;(e.currentTarget as HTMLElement).style.background = '#f9fafb'
+            const el = e.currentTarget
+            el.style.borderColor = 'rgba(255,255,255,0.07)'
+            el.style.boxShadow = ''
           }}
         />
         {rightElement && (
@@ -127,8 +129,8 @@ function Toast({ message, type }: { message: string; type: 'success' | 'error' }
       className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium"
       style={
         type === 'success'
-          ? { background: 'rgba(139,196,64,0.12)', color: '#4a7c1f', border: '1px solid rgba(139,196,64,0.3)' }
-          : { background: 'rgba(239,68,68,0.08)', color: '#dc2626', border: '1px solid rgba(239,68,68,0.2)' }
+          ? { background: 'rgba(127,193,54,0.1)', color: '#7FC136', border: '1px solid rgba(127,193,54,0.25)' }
+          : { background: 'rgba(239,68,68,0.1)', color: '#F87171', border: '1px solid rgba(239,68,68,0.2)' }
       }
     >
       {type === 'success' ? (
@@ -270,8 +272,8 @@ export default function PerfilPage() {
         <div
           className="rounded-2xl p-6 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #131314 0%, #1e2a3a 100%)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'linear-gradient(135deg, #0C1628 0%, #12213A 100%)',
+            border: '1px solid rgba(255,255,255,0.07)',
           }}
         >
           <div className="flex items-center gap-5">
@@ -287,7 +289,7 @@ export default function PerfilPage() {
               ) : (
                 <div
                   className="w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold text-white"
-                  style={{ background: 'linear-gradient(135deg, #2A79C2, #8BC440)' }}
+                  style={{ background: 'linear-gradient(135deg, #4A90D9, #7FC136)' }}
                 >
                   {initials}
                 </div>
@@ -310,12 +312,12 @@ export default function PerfilPage() {
             </div>
 
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-xl font-bold" style={{ color: '#EEF2FF' }}>
                 {profile.nombre} {profile.apellido}
               </h2>
-              <p className="text-zinc-400 text-sm mt-0.5">{getRolLabel(profile.rol)}</p>
+              <p className="text-sm mt-0.5" style={{ color: '#475569' }}>{getRolLabel(profile.rol)}</p>
               {profile.zona && (
-                <p className="text-zinc-500 text-xs mt-1 flex items-center gap-1">
+                <p className="text-xs mt-1 flex items-center gap-1" style={{ color: '#2C3E55' }}>
                   <MapPin className="h-3 w-3" />
                   {profile.zona.nombre}, {profile.zona.provincia}
                 </p>
@@ -325,7 +327,7 @@ export default function PerfilPage() {
                   onClick={handleSaveAvatar}
                   disabled={savingAvatar}
                   className="mt-3 flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-semibold text-white transition-all disabled:opacity-60"
-                  style={{ background: '#8BC440', boxShadow: '0 2px 8px rgba(139,196,64,0.4)' }}
+                  style={{ background: '#7FC136', boxShadow: '0 2px 8px rgba(127,193,54,0.35)' }}
                 >
                   {savingAvatar ? (
                     <svg className="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24">
@@ -342,7 +344,7 @@ export default function PerfilPage() {
           </div>
           <div
             className="absolute -right-8 -top-8 w-36 h-36 rounded-full opacity-10"
-            style={{ background: '#2A79C2' }}
+            style={{ background: '#4A90D9' }}
           />
         </div>
 
@@ -370,7 +372,7 @@ export default function PerfilPage() {
           title="Datos personales"
           subtitle="Podés editar tu nombre y teléfono"
           icon={User}
-          iconColor="#2A79C2"
+          iconColor="#4A90D9"
         >
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -405,8 +407,8 @@ export default function PerfilPage() {
                 disabled={savingInfo}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-60"
                 style={{
-                  background: savingInfo ? '#1a5fa0' : '#2A79C2',
-                  boxShadow: '0 4px 12px rgba(42,121,194,0.3)',
+                  background: savingInfo ? '#3a7bbf' : '#4A90D9',
+                  boxShadow: '0 4px 12px rgba(74,144,217,0.3)',
                 }}
               >
                 {savingInfo ? (
@@ -428,7 +430,7 @@ export default function PerfilPage() {
           title="Cambiar contraseña"
           subtitle="Usá una contraseña segura de al menos 8 caracteres"
           icon={Lock}
-          iconColor="#8BC440"
+          iconColor="#7FC136"
         >
           <div className="space-y-4">
             <InputField
@@ -442,7 +444,7 @@ export default function PerfilPage() {
                 <button
                   type="button"
                   onClick={() => setShowCurrent((v) => !v)}
-                  className="text-zinc-400 hover:text-zinc-600 transition-colors"
+                  className="transition-colors" style={{ color: '#2C3E55' }} onMouseEnter={(e)=>(e.currentTarget as HTMLElement).style.color='#94A3B8'} onMouseLeave={(e)=>(e.currentTarget as HTMLElement).style.color='#2C3E55'}
                 >
                   {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -460,7 +462,7 @@ export default function PerfilPage() {
                   <button
                     type="button"
                     onClick={() => setShowNew((v) => !v)}
-                    className="text-zinc-400 hover:text-zinc-600 transition-colors"
+                    className="transition-colors" style={{ color: '#2C3E55' }} onMouseEnter={(e)=>(e.currentTarget as HTMLElement).style.color='#94A3B8'} onMouseLeave={(e)=>(e.currentTarget as HTMLElement).style.color='#2C3E55'}
                   >
                     {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -477,7 +479,7 @@ export default function PerfilPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirm((v) => !v)}
-                    className="text-zinc-400 hover:text-zinc-600 transition-colors"
+                    className="transition-colors" style={{ color: '#2C3E55' }} onMouseEnter={(e)=>(e.currentTarget as HTMLElement).style.color='#94A3B8'} onMouseLeave={(e)=>(e.currentTarget as HTMLElement).style.color='#2C3E55'}
                   >
                     {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -501,9 +503,9 @@ export default function PerfilPage() {
                               : i <= 2
                               ? '#f59e0b'
                               : i <= 3
-                              ? '#8BC440'
-                              : '#2A79C2'
-                            : 'rgba(0,0,0,0.08)',
+                              ? '#7FC136'
+                              : '#4A90D9'
+                            : 'rgba(255,255,255,0.07)',
                       }}
                     />
                   ))}
@@ -528,8 +530,8 @@ export default function PerfilPage() {
                 disabled={savingPass}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-60"
                 style={{
-                  background: savingPass ? '#6fa832' : '#8BC440',
-                  boxShadow: '0 4px 12px rgba(139,196,64,0.3)',
+                  background: savingPass ? '#6aad2d' : '#7FC136',
+                  boxShadow: '0 4px 12px rgba(127,193,54,0.3)',
                 }}
               >
                 {savingPass ? (

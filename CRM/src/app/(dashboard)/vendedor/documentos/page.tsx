@@ -11,8 +11,8 @@ import type { Documento } from '@/lib/types'
 
 const TIPOS = [
   { label: 'Todos', value: '', color: '#64748b' },
-  { label: 'Productos', value: 'producto', color: '#2A79C2' },
-  { label: 'Coberturas', value: 'cobertura', color: '#8BC440' },
+  { label: 'Productos', value: 'producto', color: '#4A90D9' },
+  { label: 'Coberturas', value: 'cobertura', color: '#7FC136' },
   { label: 'Procesos', value: 'proceso', color: '#f59e0b' },
   { label: 'Formularios', value: 'formulario', color: '#a855f7' },
 ]
@@ -53,27 +53,27 @@ export default function VendedorDocumentosPage() {
         <div
           className="rounded-2xl p-6 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #131314 0%, #1e2a3a 100%)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'linear-gradient(135deg, #0C1628 0%, #12213A 100%)',
+            border: '1px solid rgba(255,255,255,0.07)',
           }}
         >
           <div className="flex items-center gap-4">
             <div
               className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(42,121,194,0.2)', border: '1px solid rgba(42,121,194,0.3)' }}
+              style={{ background: 'rgba(74,144,217,0.2)', border: '1px solid rgba(74,144,217,0.3)' }}
             >
-              <FileText className="h-6 w-6" style={{ color: '#2A79C2' }} />
+              <FileText className="h-6 w-6" style={{ color: '#4A90D9' }} />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">Biblioteca de documentos</h2>
-              <p className="text-zinc-400 text-sm mt-0.5">
+              <p className="text-sm mt-0.5" style={{ color: '#475569' }}>
                 {documentos.length} documento{documentos.length !== 1 ? 's' : ''} disponibles
               </p>
             </div>
           </div>
           <div
             className="absolute -right-8 -top-8 w-36 h-36 rounded-full opacity-10"
-            style={{ background: '#2A79C2' }}
+            style={{ background: '#4A90D9' }}
           />
         </div>
 
@@ -97,9 +97,9 @@ export default function VendedorDocumentosPage() {
                           boxShadow: `0 4px 12px ${t.color}40`,
                         }
                       : {
-                          background: 'white',
-                          color: '#64748b',
-                          border: '1px solid rgba(0,0,0,0.08)',
+                          background: '#12213A',
+                          color: '#475569',
+                          border: '1px solid rgba(255,255,255,0.07)',
                         }
                   }
                 >
@@ -111,20 +111,24 @@ export default function VendedorDocumentosPage() {
 
           {/* Búsqueda */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#475569' }} />
             <input
               type="text"
               placeholder="Buscar documento..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              className="pl-9 pr-4 py-2 rounded-xl text-sm bg-white border text-zinc-700 placeholder-zinc-400 outline-none transition-all duration-200 w-full sm:w-56"
-              style={{ border: '1px solid rgba(0,0,0,0.08)' }}
+              className="pl-9 pr-4 py-2 rounded-xl text-sm outline-none transition-all duration-200 w-full sm:w-56"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
               onFocus={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '#2A79C2'
-                ;(e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 3px rgba(42,121,194,0.12)'
+                (e.currentTarget as HTMLElement).style.borderColor = '#4A90D9'
+                ;(e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 3px rgba(74,144,217,0.12)'
               }}
               onBlur={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,0,0,0.08)'
+                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.07)'
                 ;(e.currentTarget as HTMLElement).style.boxShadow = ''
               }}
             />
@@ -136,22 +140,22 @@ export default function VendedorDocumentosPage() {
           <PageSpinner />
         ) : docsFiltrados.length === 0 ? (
           <div
-            className="flex flex-col items-center justify-center py-20 rounded-2xl bg-white"
-            style={{ border: '1px solid rgba(0,0,0,0.06)' }}
+            className="flex flex-col items-center justify-center py-20 rounded-2xl"
+            style={{ background: '#0C1628', border: '1px solid rgba(255,255,255,0.07)' }}
           >
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-              style={{ background: 'rgba(42,121,194,0.08)' }}
+              style={{ background: 'rgba(74,144,217,0.08)' }}
             >
-              <FileText className="h-8 w-8" style={{ color: '#2A79C2' }} />
+              <FileText className="h-8 w-8" style={{ color: '#4A90D9' }} />
             </div>
-            <p className="text-zinc-500 font-medium">No hay documentos</p>
-            <p className="text-zinc-400 text-sm mt-1">
+            <p className="font-medium" style={{ color: '#475569' }}>No hay documentos</p>
+            <p className="text-sm mt-1" style={{ color: '#2C3E55' }}>
               {busqueda ? 'Intentá con otro término de búsqueda' : 'Aún no se cargaron documentos en esta categoría'}
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-2">
             {docsFiltrados.map((doc) => (
               <DocumentoCard key={doc.id} documento={doc} />
             ))}

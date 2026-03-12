@@ -15,10 +15,10 @@ import type { Zona } from '@/lib/types'
 
 const FILTROS = [
   { label: 'Todos', value: '', color: '#64748b' },
-  { label: 'Nuevos', value: 'nuevo', color: '#2A79C2' },
+  { label: 'Nuevos', value: 'nuevo', color: '#4A90D9' },
   { label: 'Tomados', value: 'tomado', color: '#f59e0b' },
   { label: 'En proceso', value: 'en_proceso', color: '#a855f7' },
-  { label: 'Cerrados', value: 'cerrado', color: '#8BC440' },
+  { label: 'Cerrados', value: 'cerrado', color: '#7FC136' },
 ]
 
 export default function AdminLeadsPage() {
@@ -50,20 +50,20 @@ export default function AdminLeadsPage() {
         <div
           className="rounded-2xl p-6 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #131314 0%, #1e2a3a 100%)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'linear-gradient(135deg, #0C1628 0%, #12213A 100%)',
+            border: '1px solid rgba(255,255,255,0.07)',
           }}
         >
           <div className="flex items-center gap-4">
             <div
               className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'rgba(42,121,194,0.2)', border: '1px solid rgba(42,121,194,0.3)' }}
+              style={{ background: 'rgba(74,144,217,0.2)', border: '1px solid rgba(74,144,217,0.3)' }}
             >
-              <Target className="h-6 w-6" style={{ color: '#2A79C2' }} />
+              <Target className="h-6 w-6" style={{ color: '#4A90D9' }} />
             </div>
             <div className="flex-1">
               <h2 className="text-xl font-bold text-white">Gestión de leads</h2>
-              <p className="text-zinc-400 text-sm mt-0.5">
+              <p className="text-sm mt-0.5" style={{ color: '#475569' }}>
                 {loading ? '...' : leads.length} leads
                 {filtroActivo?.value ? ` · ${filtroActivo.label}` : ' en total'}
               </p>
@@ -71,13 +71,13 @@ export default function AdminLeadsPage() {
             <button
               onClick={() => setModalOpen(true)}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 flex-shrink-0"
-              style={{ background: '#2A79C2', boxShadow: '0 4px 16px rgba(42,121,194,0.4)' }}
+              style={{ background: '#4A90D9', boxShadow: '0 4px 16px rgba(74,144,217,0.4)' }}
             >
               <Plus className="h-4 w-4" />
               Nuevo lead
             </button>
           </div>
-          <div className="absolute -right-8 -top-8 w-36 h-36 rounded-full opacity-10" style={{ background: '#8BC440' }} />
+          <div className="absolute -right-8 -top-8 w-36 h-36 rounded-full opacity-10" style={{ background: '#7FC136' }} />
         </div>
 
         {/* Filtros */}
@@ -92,7 +92,7 @@ export default function AdminLeadsPage() {
                 style={
                   isActive
                     ? { background: f.color, color: 'white', border: `1px solid ${f.color}`, boxShadow: `0 4px 12px ${f.color}40` }
-                    : { background: 'white', color: '#64748b', border: '1px solid rgba(0,0,0,0.08)' }
+                    : { background: '#12213A', color: '#475569', border: '1px solid rgba(255,255,255,0.07)' }
                 }
               >
                 {f.label}

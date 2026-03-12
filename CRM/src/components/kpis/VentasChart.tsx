@@ -17,23 +17,23 @@ interface VentasChartProps {
   data: VentasChartData[]
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const ChartTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div
-        className="rounded-xl px-4 py-3 text-sm"
+        className="rounded-lg px-3.5 py-3 text-sm"
         style={{
-          background: 'rgba(19,19,20,0.95)',
+          background: '#0C1628',
           border: '1px solid rgba(255,255,255,0.1)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-          backdropFilter: 'blur(8px)',
+          boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
         }}
       >
-        <p className="font-semibold text-white mb-1.5">{label}</p>
+        <p className="text-xs font-semibold mb-2" style={{ color: '#94A3B8' }}>{label}</p>
         {payload.map((p: any) => (
-          <p key={p.dataKey} className="text-zinc-300 text-xs">
-            <span style={{ color: p.color }}>●</span> {p.name}:{' '}
-            <span className="font-semibold text-white">{p.value}</span>
+          <p key={p.dataKey} className="text-xs flex items-center gap-2">
+            <span style={{ color: p.color }}>●</span>
+            <span style={{ color: '#475569' }}>{p.name}:</span>
+            <span className="font-bold" style={{ color: '#EEF2FF' }}>{p.value}</span>
           </p>
         ))}
       </div>
@@ -42,56 +42,56 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null
 }
 
+const axisTick = { fontSize: 10, fill: '#2C3E55', fontFamily: 'Inter' }
+const gridColor = 'rgba(255,255,255,0.04)'
+
 export function VentasChart({ data }: VentasChartProps) {
   return (
     <div
-      className="bg-white rounded-2xl overflow-hidden"
-      style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}
+      className="rounded-xl overflow-hidden"
+      style={{
+        background: '#0C1628',
+        border: '1px solid rgba(255,255,255,0.07)',
+      }}
     >
-      <div className="px-6 py-5 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+      {/* Header */}
+      <div
+        className="px-5 py-4 flex items-center justify-between"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+      >
         <div>
-          <h3 className="text-sm font-semibold text-zinc-800">Evolución de ventas</h3>
-          <p className="text-xs text-zinc-400 mt-0.5">Últimos 6 meses</p>
+          <h3 className="text-sm font-semibold" style={{ color: '#EEF2FF' }}>Evolución de ventas</h3>
+          <p className="text-xs mt-0.5" style={{ color: '#2C3E55' }}>Últimos 6 meses</p>
         </div>
-        <div className="flex items-center gap-4 text-xs text-zinc-400">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full inline-block" style={{ background: '#2A79C2' }} />
-            Ventas
-          </span>
+        <div className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full inline-block" style={{ background: '#4A90D9' }} />
+          <span className="text-xs" style={{ color: '#475569' }}>Ventas</span>
         </div>
       </div>
 
-      <div className="p-6">
-        <ResponsiveContainer width="100%" height={220}>
-          <AreaChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+      {/* Chart */}
+      <div className="p-5">
+        <ResponsiveContainer width="100%" height={200}>
+          <AreaChart data={data} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
             <defs>
               <linearGradient id="ventasGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#2A79C2" stopOpacity={0.15} />
-                <stop offset="95%" stopColor="#2A79C2" stopOpacity={0} />
+                <stop offset="0%"  stopColor="#4A90D9" stopOpacity={0.25} />
+                <stop offset="100%" stopColor="#4A90D9" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
-            <XAxis
-              dataKey="mes"
-              tick={{ fontSize: 11, fill: '#94a3b8', fontFamily: 'Inter' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fontSize: 11, fill: '#94a3b8', fontFamily: 'Inter' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip content={<CustomTooltip />} />
+            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+            <XAxis dataKey="mes"   tick={axisTick} axisLine={false} tickLine={false} />
+            <YAxis                  tick={axisTick} axisLine={false} tickLine={false} />
+            <Tooltip content={<ChartTooltip />} />
             <Area
               type="monotone"
               dataKey="ventas"
-              stroke="#2A79C2"
-              strokeWidth={2.5}
+              stroke="#4A90D9"
+              strokeWidth={2}
               fill="url(#ventasGrad)"
               name="Ventas"
-              dot={{ r: 4, fill: '#2A79C2', strokeWidth: 0 }}
-              activeDot={{ r: 6, fill: '#2A79C2', strokeWidth: 0 }}
+              dot={{ r: 3, fill: '#4A90D9', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#4A90D9', strokeWidth: 2, stroke: 'rgba(74,144,217,0.3)' }}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -103,30 +103,42 @@ export function VentasChart({ data }: VentasChartProps) {
 export function ComisionesChart({ data }: VentasChartProps) {
   return (
     <div
-      className="bg-white rounded-2xl overflow-hidden"
-      style={{ border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}
+      className="rounded-xl overflow-hidden"
+      style={{
+        background: '#0C1628',
+        border: '1px solid rgba(255,255,255,0.07)',
+      }}
     >
-      <div className="px-6 py-5" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
-        <h3 className="text-sm font-semibold text-zinc-800">Comisiones generadas</h3>
-        <p className="text-xs text-zinc-400 mt-0.5">Últimos 6 meses</p>
+      {/* Header */}
+      <div
+        className="px-5 py-4 flex items-center justify-between"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+      >
+        <div>
+          <h3 className="text-sm font-semibold" style={{ color: '#EEF2FF' }}>Comisiones generadas</h3>
+          <p className="text-xs mt-0.5" style={{ color: '#2C3E55' }}>Últimos 6 meses</p>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full inline-block" style={{ background: '#7FC136' }} />
+          <span className="text-xs" style={{ color: '#475569' }}>Comisiones</span>
+        </div>
       </div>
-      <div className="p-6">
-        <ResponsiveContainer width="100%" height={180}>
-          <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
-            <XAxis
-              dataKey="mes"
-              tick={{ fontSize: 11, fill: '#94a3b8', fontFamily: 'Inter' }}
-              axisLine={false}
-              tickLine={false}
+
+      {/* Chart */}
+      <div className="p-5">
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={data} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+            <XAxis dataKey="mes"   tick={axisTick} axisLine={false} tickLine={false} />
+            <YAxis                  tick={axisTick} axisLine={false} tickLine={false} />
+            <Tooltip content={<ChartTooltip />} />
+            <Bar
+              dataKey="comisiones"
+              fill="#7FC136"
+              radius={[4, 4, 0, 0]}
+              name="Comisiones ($)"
+              opacity={0.85}
             />
-            <YAxis
-              tick={{ fontSize: 11, fill: '#94a3b8', fontFamily: 'Inter' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="comisiones" fill="#8BC440" radius={[6, 6, 0, 0]} name="Comisiones ($)" />
           </BarChart>
         </ResponsiveContainer>
       </div>

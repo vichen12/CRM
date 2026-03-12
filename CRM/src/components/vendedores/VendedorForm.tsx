@@ -45,16 +45,16 @@ function FormField({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{label}</label>
+      <label className="text-xs font-medium uppercase tracking-widest" style={{ color: '#2C3E55', letterSpacing: '0.08em' }}>{label}</label>
       {children}
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p className="text-xs" style={{ color: '#F87171' }}>{error}</p>}
     </div>
   )
 }
 
 const inputStyle = {
-  base: 'w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm text-zinc-800 bg-zinc-50 outline-none transition-all duration-200',
-  border: '1px solid rgba(0,0,0,0.08)',
+  base: 'w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-150',
+  border: '1px solid rgba(255,255,255,0.07)',
 }
 
 export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
@@ -111,17 +111,21 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
     reader.readAsDataURL(file)
   }
 
-  const focusStyle = (hasError?: string) => ({
-    border: hasError ? '1px solid #ef4444' : '1px solid rgba(0,0,0,0.08)',
+  const focusStyle = (hasError?: string): React.CSSProperties => ({
+    background: '#12213A',
+    border: hasError ? '1px solid #EF4444' : '1px solid rgba(255,255,255,0.07)',
+    color: '#EEF2FF',
   })
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-    ;(e.currentTarget as HTMLElement).style.borderColor = '#2A79C2'
-    ;(e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 3px rgba(42,121,194,0.1)'
+    const el = e.currentTarget as HTMLElement
+    el.style.borderColor = '#4A90D9'
+    el.style.boxShadow = '0 0 0 3px rgba(74,144,217,0.1)'
   }
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-    ;(e.currentTarget as HTMLElement).style.borderColor = 'rgba(0,0,0,0.08)'
-    ;(e.currentTarget as HTMLElement).style.boxShadow = ''
+    const el = e.currentTarget as HTMLElement
+    el.style.borderColor = 'rgba(255,255,255,0.07)'
+    el.style.boxShadow = ''
   }
 
   return (
@@ -131,8 +135,8 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
         <div
           className="w-20 h-20 rounded-2xl flex items-center justify-center cursor-pointer overflow-hidden relative group"
           style={{
-            background: avatarPreview ? 'transparent' : 'linear-gradient(135deg, #2A79C2, #8BC440)',
-            border: '2px dashed rgba(42,121,194,0.3)',
+            background: avatarPreview ? 'transparent' : 'linear-gradient(135deg, #4A90D9, #7FC136)',
+            border: '2px dashed rgba(74,144,217,0.3)',
           }}
           onClick={() => fileRef.current?.click()}
         >
@@ -150,7 +154,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
             </div>
           )}
         </div>
-        <p className="text-xs text-zinc-400">Hacé click para subir foto (máx. 2MB)</p>
+        <p className="text-xs" style={{ color: '#2C3E55' }}>Hacé click para subir foto (máx. 2MB)</p>
         <input
           ref={fileRef}
           type="file"
@@ -165,7 +169,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
       <div className="grid grid-cols-2 gap-4">
         <FormField label="Nombre" error={errors.nombre}>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
             <input
               className={inputStyle.base}
               style={focusStyle(errors.nombre)}
@@ -179,7 +183,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
         </FormField>
         <FormField label="Apellido" error={errors.apellido}>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
             <input
               className={inputStyle.base}
               style={focusStyle(errors.apellido)}
@@ -196,7 +200,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
       {/* Email */}
       <FormField label="Email" error={errors.email}>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
           <input
             type="email"
             className={inputStyle.base}
@@ -213,7 +217,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
       {/* Teléfono */}
       <FormField label="Teléfono" error={errors.telefono}>
         <div className="relative">
-          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
           <input
             className={inputStyle.base}
             style={focusStyle(errors.telefono)}
@@ -229,7 +233,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
       {/* Contraseña */}
       <FormField label="Contraseña temporal" error={errors.password}>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
           <input
             type="password"
             className={inputStyle.base}
@@ -241,7 +245,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
             placeholder="Mínimo 6 caracteres"
           />
         </div>
-        <p className="text-[11px] text-zinc-400">El vendedor puede cambiarla desde su perfil</p>
+        <p className="text-[11px]" style={{ color: '#2C3E55' }}>El vendedor puede cambiarla desde su perfil</p>
       </FormField>
 
       {/* Tipo de vendedor */}
@@ -251,8 +255,8 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
           onChange={set('rol')}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="w-full px-3.5 py-2.5 rounded-xl text-sm text-zinc-800 bg-zinc-50 outline-none transition-all duration-200"
-          style={{ border: '1px solid rgba(0,0,0,0.08)' }}
+          className="w-full px-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-150"
+          style={{ background: '#12213A', border: '1px solid rgba(255,255,255,0.07)', color: '#EEF2FF' }}
         >
           <option value="vendedor_sin_matricula">Sin matrícula — trabaja bajo matrícula del broker</option>
           <option value="vendedor_matriculado">Con matrícula propia</option>
@@ -263,7 +267,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
       {data.rol === 'vendedor_matriculado' && (
         <FormField label="Número de matrícula" error={errors.matricula}>
           <div className="relative">
-            <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+            <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
             <input
               className={inputStyle.base}
               style={focusStyle(errors.matricula)}
@@ -286,8 +290,8 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
             onChange={set('zona_id')}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            className="w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm text-zinc-800 bg-zinc-50 outline-none transition-all duration-200"
-            style={{ border: errors.zona_id ? '1px solid #ef4444' : '1px solid rgba(0,0,0,0.08)' }}
+            className="w-full pl-9 pr-3.5 py-2.5 rounded-xl text-sm outline-none transition-all duration-150"
+            style={{ background: '#12213A', border: errors.zona_id ? '1px solid #EF4444' : '1px solid rgba(255,255,255,0.07)', color: '#EEF2FF' }}
           >
             <option value="">Seleccionar zona...</option>
             {zonas.map((z) => (
@@ -305,7 +309,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
           type="button"
           onClick={onCancel}
           className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-zinc-600 transition-colors"
-          style={{ background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.08)' }}
+          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#94A3B8' }}
         >
           Cancelar
         </button>
@@ -313,7 +317,7 @@ export function VendedorForm({ zonas, onSubmit, onCancel }: VendedorFormProps) {
           type="submit"
           disabled={loading}
           className="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all disabled:opacity-60 flex items-center justify-center gap-2"
-          style={{ background: '#2A79C2', boxShadow: '0 4px 12px rgba(42,121,194,0.3)' }}
+          style={{ background: '#4A90D9', boxShadow: '0 4px 12px rgba(74,144,217,0.3)' }}
         >
           {loading && (
             <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">

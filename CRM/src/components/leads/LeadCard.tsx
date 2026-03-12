@@ -15,21 +15,27 @@ interface LeadCardProps {
 export function LeadCard({ lead, showTomar, onTomar, tomarLoading }: LeadCardProps) {
   return (
     <div
-      className="bg-white rounded-2xl p-5 flex flex-col gap-4 transition-all duration-200 hover:-translate-y-0.5"
+      className="rounded-xl p-5 flex flex-col gap-4 transition-all duration-150"
       style={{
-        border: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+        background: '#0C1628',
+        border: '1px solid rgba(255,255,255,0.07)',
       }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)' }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)' }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement
+        el.style.border = '1px solid rgba(255,255,255,0.12)'
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement
+        el.style.border = '1px solid rgba(255,255,255,0.07)'
+      }}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
         <div>
-          <h3 className="font-semibold text-zinc-800 text-sm">
+          <h3 className="font-semibold text-sm" style={{ color: '#EEF2FF' }}>
             {lead.nombre} {lead.apellido}
           </h3>
-          <div className="flex items-center gap-1 mt-0.5 text-xs text-zinc-400">
+          <div className="flex items-center gap-1 mt-1 text-xs" style={{ color: '#2C3E55' }}>
             <Clock className="h-3 w-3" />
             {formatRelativeTime(lead.created_at)}
           </div>
@@ -39,34 +45,47 @@ export function LeadCard({ lead, showTomar, onTomar, tomarLoading }: LeadCardPro
 
       {/* Datos */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2.5 text-sm text-zinc-600">
-          <div className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(42,121,194,0.1)' }}>
-            <Phone className="h-3 w-3" style={{ color: '#2A79C2' }} />
+        <div className="flex items-center gap-2.5 text-sm" style={{ color: '#475569' }}>
+          <div
+            className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(74,144,217,0.1)' }}
+          >
+            <Phone className="h-3 w-3" style={{ color: '#4A90D9' }} />
           </div>
           <span>{lead.telefono}</span>
         </div>
 
         {lead.email && (
-          <div className="flex items-center gap-2.5 text-sm text-zinc-600">
-            <div className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(42,121,194,0.1)' }}>
-              <Mail className="h-3 w-3" style={{ color: '#2A79C2' }} />
+          <div className="flex items-center gap-2.5 text-sm" style={{ color: '#475569' }}>
+            <div
+              className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(74,144,217,0.1)' }}
+            >
+              <Mail className="h-3 w-3" style={{ color: '#4A90D9' }} />
             </div>
             <span className="truncate">{lead.email}</span>
           </div>
         )}
 
-        <div className="flex items-center gap-2.5 text-sm text-zinc-600">
-          <div className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(139,196,64,0.1)' }}>
-            <MapPin className="h-3 w-3" style={{ color: '#8BC440' }} />
+        <div className="flex items-center gap-2.5 text-sm" style={{ color: '#475569' }}>
+          <div
+            className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0"
+            style={{ background: 'rgba(127,193,54,0.1)' }}
+          >
+            <MapPin className="h-3 w-3" style={{ color: '#7FC136' }} />
           </div>
-          <span>{lead.zona?.nombre ?? '-'}</span>
+          <span>{lead.zona?.nombre ?? '—'}</span>
         </div>
       </div>
 
       {lead.notas && (
         <p
-          className="text-xs text-zinc-500 rounded-xl px-3 py-2 line-clamp-2"
-          style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.04)' }}
+          className="text-xs rounded-lg px-3 py-2 line-clamp-2"
+          style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.05)',
+            color: '#475569',
+          }}
         >
           {lead.notas}
         </p>
@@ -76,10 +95,16 @@ export function LeadCard({ lead, showTomar, onTomar, tomarLoading }: LeadCardPro
         <button
           onClick={() => onTomar?.(lead.id)}
           disabled={tomarLoading}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-150 disabled:opacity-50"
           style={{
-            background: 'linear-gradient(135deg, #2A79C2, #1f6aad)',
-            boxShadow: '0 4px 12px rgba(42,121,194,0.3)',
+            background: 'linear-gradient(135deg, #4A90D9 0%, #3a7bbf 100%)',
+            boxShadow: '0 4px 16px rgba(74,144,217,0.25)',
+          }}
+          onMouseEnter={(e) => {
+            if (!tomarLoading) (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 20px rgba(74,144,217,0.35)'
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(74,144,217,0.25)'
           }}
         >
           {tomarLoading ? (

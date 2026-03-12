@@ -1,5 +1,4 @@
-import { FileText, Download, Trash2, FileSpreadsheet, FileImage, File } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { FileText, Download, Trash2, ExternalLink } from 'lucide-react'
 import { formatDate } from '@/lib/utils/format'
 import type { Documento, TipoDocumento } from '@/lib/types'
 
@@ -9,12 +8,12 @@ interface DocumentoCardProps {
   onDelete?: (id: string) => void
 }
 
-const tipoConfig: Record<TipoDocumento, { label: string; color: string; bg: string; border: string }> = {
-  producto:   { label: 'Producto',   color: '#2A79C2', bg: 'rgba(42,121,194,0.08)',  border: 'rgba(42,121,194,0.2)' },
-  cobertura:  { label: 'Cobertura',  color: '#8BC440', bg: 'rgba(139,196,64,0.08)',  border: 'rgba(139,196,64,0.2)' },
-  proceso:    { label: 'Proceso',    color: '#f59e0b', bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.2)' },
-  formulario: { label: 'Formulario', color: '#a855f7', bg: 'rgba(168,85,247,0.08)',  border: 'rgba(168,85,247,0.2)' },
-  otro:       { label: 'Otro',       color: '#64748b', bg: 'rgba(100,116,139,0.08)', border: 'rgba(100,116,139,0.2)' },
+const tipoConfig: Record<TipoDocumento, { label: string; color: string; bg: string }> = {
+  producto:   { label: 'Producto',   color: '#4A90D9', bg: 'rgba(74,144,217,0.12)'  },
+  cobertura:  { label: 'Cobertura',  color: '#7FC136', bg: 'rgba(127,193,54,0.12)'  },
+  proceso:    { label: 'Proceso',    color: '#F59E0B', bg: 'rgba(245,158,11,0.12)'  },
+  formulario: { label: 'Formulario', color: '#8B5CF6', bg: 'rgba(139,92,246,0.12)'  },
+  otro:       { label: 'Otro',       color: '#64748B', bg: 'rgba(100,116,139,0.12)' },
 }
 
 export function DocumentoCard({ documento, canDelete, onDelete }: DocumentoCardProps) {
@@ -22,89 +21,77 @@ export function DocumentoCard({ documento, canDelete, onDelete }: DocumentoCardP
 
   return (
     <div
-      className="bg-white rounded-2xl p-5 flex flex-col gap-4 transition-all duration-200 hover:-translate-y-0.5"
+      className="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-150 group"
       style={{
-        border: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+        background: '#0C1628',
+        border: '1px solid rgba(255,255,255,0.07)',
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)'
+        (e.currentTarget as HTMLElement).style.border = '1px solid rgba(255,255,255,0.12)'
+        ;(e.currentTarget as HTMLElement).style.background = '#12213A'
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(0,0,0,0.04)'
+        (e.currentTarget as HTMLElement).style.border = '1px solid rgba(255,255,255,0.07)'
+        ;(e.currentTarget as HTMLElement).style.background = '#0C1628'
       }}
     >
-      <div className="flex items-start gap-4">
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ background: cfg.bg, border: `1px solid ${cfg.border}` }}
-        >
-          <FileText className="h-5 w-5" style={{ color: cfg.color }} />
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <h3 className="font-semibold text-zinc-800 text-sm leading-snug line-clamp-2">
-              {documento.nombre}
-            </h3>
-          </div>
-          {documento.descripcion && (
-            <p className="text-xs text-zinc-400 line-clamp-2 mb-2">{documento.descripcion}</p>
-          )}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span
-              className="text-[11px] font-semibold px-2 py-0.5 rounded-lg"
-              style={{ background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.border}` }}
-            >
-              {cfg.label}
-            </span>
-            <span className="text-[11px] text-zinc-400">{formatDate(documento.created_at)}</span>
-          </div>
-        </div>
+      {/* Icon */}
+      <div
+        className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+        style={{ background: cfg.bg }}
+      >
+        <FileText className="h-4.5 w-4.5" style={{ color: cfg.color, width: 18, height: 18 }} />
       </div>
 
-      <div className="flex gap-2 pt-1" style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}>
-        <a
-          href={documento.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1"
-        >
-          <button
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
-            style={{
-              background: 'rgba(42,121,194,0.08)',
-              color: '#2A79C2',
-              border: '1px solid rgba(42,121,194,0.2)',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'rgba(42,121,194,0.15)'
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'rgba(42,121,194,0.08)'
-            }}
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <p className="text-sm font-semibold truncate" style={{ color: '#EEF2FF' }}>
+            {documento.nombre}
+          </p>
+          <span
+            className="text-[10px] font-semibold px-2 py-0.5 rounded-md flex-shrink-0"
+            style={{ background: cfg.bg, color: cfg.color }}
           >
-            <Download className="h-3.5 w-3.5" />
-            Descargar
+            {cfg.label}
+          </span>
+        </div>
+        {documento.descripcion && (
+          <p className="text-xs truncate" style={{ color: '#475569' }}>{documento.descripcion}</p>
+        )}
+        <p className="text-[11px] mt-0.5" style={{ color: '#2C3E55' }}>
+          {formatDate(documento.created_at)}
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+        <a href={documento.url} target="_blank" rel="noopener noreferrer">
+          <button
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+            style={{ background: 'rgba(74,144,217,0.1)', color: '#4A90D9', border: '1px solid rgba(74,144,217,0.2)' }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.18)' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(74,144,217,0.1)' }}
+          >
+            <Download style={{ width: 13, height: 13 }} />
+            Abrir
           </button>
         </a>
         {canDelete && (
           <button
             onClick={() => onDelete?.(documento.id)}
-            className="px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200"
-            style={{
-              background: 'rgba(239,68,68,0.08)',
-              color: '#ef4444',
-              border: '1px solid rgba(239,68,68,0.2)',
-            }}
+            className="p-1.5 rounded-lg transition-colors"
+            style={{ color: '#475569' }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'rgba(239,68,68,0.15)'
+              (e.currentTarget as HTMLElement).style.color = '#EF4444'
+              ;(e.currentTarget as HTMLElement).style.background = 'rgba(239,68,68,0.08)'
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = 'rgba(239,68,68,0.08)'
+              (e.currentTarget as HTMLElement).style.color = '#475569'
+              ;(e.currentTarget as HTMLElement).style.background = 'transparent'
             }}
           >
-            <Trash2 className="h-3.5 w-3.5" />
+            <Trash2 style={{ width: 14, height: 14 }} />
           </button>
         )}
       </div>

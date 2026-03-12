@@ -2,48 +2,91 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f6f9;
-  --foreground: #0f172a;
-  --brand-blue: #2A79C2;
-  --brand-green: #8BC440;
-  --brand-dark: #131314;
+  /* Surfaces */
+  --bg-base:      #060C17;
+  --bg-surface:   #0C1628;
+  --bg-elevated:  #12213A;
+  --bg-overlay:   #1A2E4A;
+
+  /* Brand */
+  --blue:         #4A90D9;
+  --blue-dim:     rgba(74, 144, 217, 0.12);
+  --blue-glow:    rgba(74, 144, 217, 0.25);
+  --green:        #7FC136;
+  --green-dim:    rgba(127, 193, 54, 0.12);
+  --purple:       #8B5CF6;
+  --purple-dim:   rgba(139, 92, 246, 0.12);
+  --amber:        #F59E0B;
+  --amber-dim:    rgba(245, 158, 11, 0.12);
+  --red:          #EF4444;
+  --red-dim:      rgba(239, 68, 68, 0.12);
+  --cyan:         #06B6D4;
+  --cyan-dim:     rgba(6, 182, 212, 0.12);
+
+  /* Borders */
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-md:    rgba(255, 255, 255, 0.11);
+  --border-blue:  rgba(74, 144, 217, 0.35);
+
+  /* Text */
+  --text-1:       #EEF2FF;
+  --text-2:       #94A3B8;
+  --text-3:       #475569;
+  --text-4:       #2C3E55;
+
+  /* Legacy compat */
+  --background:   var(--bg-base);
+  --foreground:   var(--text-1);
+  --brand-blue:   #4A90D9;
+  --brand-green:  #7FC136;
+  --brand-dark:   #060C17;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-brand-blue: #2A79C2;
-  --color-brand-green: #8BC440;
-  --color-brand-dark: #131314;
+  --color-background:    var(--bg-base);
+  --color-foreground:    var(--text-1);
+  --color-brand-blue:    #4A90D9;
+  --color-brand-green:   #7FC136;
+  --color-brand-dark:    #060C17;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg-base);
+  color: var(--text-1);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ─── Scrollbar ──────────────────────────────── */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #334155 transparent;
+  scrollbar-color: #1A2E4A transparent;
+}
+*::-webkit-scrollbar        { width: 4px; height: 4px; }
+*::-webkit-scrollbar-track  { background: transparent; }
+*::-webkit-scrollbar-thumb  { background: #1A2E4A; border-radius: 2px; }
+*::-webkit-scrollbar-thumb:hover { background: #243D5C; }
+
+/* ─── Selection ──────────────────────────────── */
+::selection {
+  background: rgba(74, 144, 217, 0.28);
+  color: #EEF2FF;
 }
 
-*::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 2px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+/* ─── Input autofill dark override ──────────── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #EEF2FF;
+  -webkit-box-shadow: 0 0 0 100px #12213A inset;
+  transition: background-color 5000s ease-in-out 0s;
 }

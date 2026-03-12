@@ -12,19 +12,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean
 }
 
-const variantClasses: Record<Variant, string> = {
-  primary: 'bg-[#2A79C2] text-white hover:bg-[#1f6aad] focus:ring-[#2A79C2]/40 shadow-sm shadow-[#2A79C2]/20',
-  secondary: 'bg-zinc-100 text-zinc-800 hover:bg-zinc-200 focus:ring-zinc-400',
-  danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500/40',
-  ghost: 'bg-transparent text-zinc-600 hover:bg-zinc-100 focus:ring-zinc-400',
-  outline: 'bg-transparent border border-zinc-300 text-zinc-700 hover:bg-zinc-50 focus:ring-zinc-400',
-  success: 'bg-[#8BC440] text-white hover:bg-[#7ab038] focus:ring-[#8BC440]/40 shadow-sm shadow-[#8BC440]/20',
+const variantStyles: Record<Variant, React.CSSProperties> = {
+  primary:   { background: '#4A90D9', color: '#fff', border: '1px solid transparent' },
+  secondary: { background: 'rgba(255,255,255,0.07)', color: '#94A3B8', border: '1px solid rgba(255,255,255,0.1)' },
+  danger:    { background: 'rgba(239,68,68,0.15)', color: '#F87171', border: '1px solid rgba(239,68,68,0.25)' },
+  ghost:     { background: 'transparent', color: '#475569', border: '1px solid transparent' },
+  outline:   { background: 'transparent', color: '#94A3B8', border: '1px solid rgba(255,255,255,0.1)' },
+  success:   { background: '#7FC136', color: '#fff', border: '1px solid transparent' },
 }
 
 const sizeClasses: Record<Size, string> = {
   sm: 'px-3 py-1.5 text-xs',
   md: 'px-4 py-2 text-sm',
-  lg: 'px-6 py-3 text-sm font-semibold',
+  lg: 'px-5 py-2.5 text-sm font-semibold',
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -34,13 +34,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200',
-          'focus:outline-none focus:ring-2 focus:ring-offset-2',
+          'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-150',
+          'focus:outline-none',
           'disabled:opacity-50 disabled:cursor-not-allowed',
-          variantClasses[variant],
           sizeClasses[size],
           className
         )}
+        style={variantStyles[variant]}
         {...props}
       >
         {loading && (

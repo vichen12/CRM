@@ -46,7 +46,7 @@ export default function AdminNoticiasPage() {
     <DashboardLayout profile={profile} title="Noticias y novedades">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm" style={{ color: '#475569' }}>
             {noticias.length} publicación{noticias.length !== 1 ? 'es' : ''}
           </p>
           <Button onClick={() => setModalOpen(true)}>

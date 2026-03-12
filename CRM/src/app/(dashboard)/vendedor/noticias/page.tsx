@@ -27,7 +27,7 @@ export default function VendedorNoticiasPage() {
       {loading ? (
         <PageSpinner />
       ) : noticias.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+        <div className="flex flex-col items-center justify-center py-20" style={{ color: '#475569' }}>
           <p>No hay noticias publicadas aún</p>
         </div>
       ) : (

@@ -22,7 +22,7 @@ export function KPIGrid({ kpis }: KPIGridProps) {
         value={formatCurrency(kpis.comisiones_mes)}
         subtitle="ingresos generados"
         icon={DollarSign}
-        color="blue"
+        color="cyan"
       />
       <KPICard
         title="Leads tomados"

@@ -43,16 +43,20 @@ export default function VendedorLeadsPage() {
     <DashboardLayout profile={profile} title="Leads">
       <div className="space-y-4">
         {/* Tabs */}
-        <div className="flex gap-1 bg-gray-100 rounded-xl p-1 w-fit">
+        <div
+          className="flex gap-1 rounded-xl p-1 w-fit"
+          style={{ background: '#12213A', border: '1px solid rgba(255,255,255,0.07)' }}
+        >
           {TABS.map((t) => (
             <button
               key={t.value}
               onClick={() => setTab(t.value as 'zona' | 'mios')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              style={
                 tab === t.value
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-              }`}
+                  ? { background: '#0C1628', color: '#EEF2FF', boxShadow: '0 1px 4px rgba(0,0,0,0.3)' }
+                  : { color: '#475569' }
+              }
             >
               {t.label}
             </button>

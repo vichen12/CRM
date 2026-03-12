@@ -17,7 +17,7 @@ export function DashboardLayout({ profile, title, children }: DashboardLayoutPro
   const { notificaciones, marcarLeida } = useNotificaciones(profile.id)
 
   return (
-    <div className="flex min-h-screen" style={{ background: '#f4f6f9' }}>
+    <div className="flex min-h-screen" style={{ background: '#060C17' }}>
       <Sidebar profile={profile} onSignOut={logout} />
       <div className="flex-1 flex flex-col min-w-0">
         <Header title={title} notificaciones={notificaciones} onMarcarLeida={marcarLeida} />

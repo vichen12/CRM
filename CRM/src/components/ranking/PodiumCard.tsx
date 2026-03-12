@@ -1,5 +1,5 @@
 import { Crown, Medal, Award } from 'lucide-react'
-import { getIniciales, formatCurrency } from '@/lib/utils/format'
+import { getIniciales } from '@/lib/utils/format'
 import type { RankingMensual } from '@/lib/types'
 
 interface PodiumCardProps {
@@ -10,33 +10,30 @@ interface PodiumCardProps {
 const positionConfig = {
   1: {
     icon: Crown,
-    gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    glow: 'rgba(245,158,11,0.3)',
-    border: 'rgba(245,158,11,0.3)',
-    bg: 'rgba(245,158,11,0.06)',
+    color: '#F59E0B',
+    dim: 'rgba(245,158,11,0.12)',
+    border: 'rgba(245,158,11,0.2)',
+    glow: '0 0 40px rgba(245,158,11,0.12)',
     label: '1° Puesto',
-    scale: 'scale-105',
-    textColor: '#d97706',
+    gradient: 'linear-gradient(135deg, #F59E0B, #D97706)',
   },
   2: {
     icon: Medal,
-    gradient: 'linear-gradient(135deg, #94a3b8, #64748b)',
-    glow: 'rgba(148,163,184,0.2)',
-    border: 'rgba(148,163,184,0.3)',
-    bg: 'rgba(148,163,184,0.06)',
+    color: '#94A3B8',
+    dim: 'rgba(148,163,184,0.1)',
+    border: 'rgba(148,163,184,0.2)',
+    glow: '0 0 40px rgba(148,163,184,0.08)',
     label: '2° Puesto',
-    scale: '',
-    textColor: '#64748b',
+    gradient: 'linear-gradient(135deg, #94A3B8, #64748B)',
   },
   3: {
     icon: Award,
-    gradient: 'linear-gradient(135deg, #cd7c2f, #b45309)',
-    glow: 'rgba(180,83,9,0.2)',
-    border: 'rgba(180,83,9,0.25)',
-    bg: 'rgba(180,83,9,0.05)',
+    color: '#CD7C2F',
+    dim: 'rgba(205,124,47,0.1)',
+    border: 'rgba(205,124,47,0.2)',
+    glow: '0 0 40px rgba(205,124,47,0.08)',
     label: '3° Puesto',
-    scale: '',
-    textColor: '#b45309',
+    gradient: 'linear-gradient(135deg, #CD7C2F, #B45309)',
   },
 }
 
@@ -51,33 +48,33 @@ export function PodiumCard({ ranking, position }: PodiumCardProps) {
 
   return (
     <div
-      className={`flex flex-col items-center p-6 rounded-2xl transition-transform ${cfg.scale}`}
+      className="flex flex-col items-center p-6 rounded-xl transition-all duration-150"
       style={{
-        background: cfg.bg,
+        background: '#0C1628',
         border: `1px solid ${cfg.border}`,
-        boxShadow: `0 8px 32px ${cfg.glow}`,
+        boxShadow: cfg.glow,
       }}
     >
-      {/* Icono de posición */}
+      {/* Position badge */}
       <div
         className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-        style={{ background: cfg.gradient, boxShadow: `0 4px 12px ${cfg.glow}` }}
+        style={{ background: cfg.gradient }}
       >
         <Icon className="h-5 w-5 text-white" />
       </div>
 
-      {/* Avatar1 */}
+      {/* Avatar */}
       <div className="relative mb-3">
         {avatarUrl ? (
           <img
             src={avatarUrl}
             alt={nombre}
-            className="w-16 h-16 rounded-2xl object-cover"
+            className="w-16 h-16 rounded-xl object-cover"
             style={{ border: `2px solid ${cfg.border}` }}
           />
         ) : (
           <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center text-lg font-bold text-white"
+            className="w-16 h-16 rounded-xl flex items-center justify-center text-lg font-bold text-white"
             style={{ background: cfg.gradient }}
           >
             {initials}
@@ -91,30 +88,34 @@ export function PodiumCard({ ranking, position }: PodiumCardProps) {
         </div>
       </div>
 
-      <p className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: cfg.textColor }}>
+      <p className="text-[10px] font-semibold uppercase tracking-widest mb-1" style={{ color: cfg.color }}>
         {cfg.label}
       </p>
-      <p className="font-bold text-zinc-800 text-center text-sm leading-snug">{nombre}</p>
+      <p className="font-bold text-sm text-center leading-snug" style={{ color: '#CBD5E1' }}>{nombre}</p>
       {ranking.vendedor?.zona && (
-        <p className="text-xs text-zinc-400 mt-0.5">{ranking.vendedor.zona.nombre}</p>
+        <p className="text-xs mt-0.5" style={{ color: '#475569' }}>{ranking.vendedor.zona.nombre}</p>
       )}
 
+      {/* Points */}
       <div
-        className="mt-4 w-full py-3 rounded-xl text-center"
-        style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.05)' }}
+        className="mt-4 w-full py-3 rounded-lg text-center"
+        style={{ background: cfg.dim, border: `1px solid ${cfg.border}` }}
       >
-        <p className="text-3xl font-black" style={{ color: cfg.textColor }}>{ranking.puntos}</p>
-        <p className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">puntos</p>
+        <p className="text-3xl font-black" style={{ color: cfg.color }}>{ranking.puntos}</p>
+        <p className="text-[10px] font-semibold uppercase tracking-widest mt-0.5" style={{ color: '#2C3E55' }}>
+          puntos
+        </p>
       </div>
 
-      <div className="flex gap-4 mt-3 text-xs text-zinc-500">
+      {/* Stats */}
+      <div className="flex gap-4 mt-3 text-xs" style={{ color: '#475569' }}>
         <div className="text-center">
-          <p className="font-bold text-zinc-700">{ranking.ventas_count}</p>
+          <p className="font-bold text-sm" style={{ color: '#94A3B8' }}>{ranking.ventas_count}</p>
           <p>ventas</p>
         </div>
-        <div className="w-px bg-zinc-200" />
+        <div className="w-px" style={{ background: 'rgba(255,255,255,0.06)' }} />
         <div className="text-center">
-          <p className="font-bold text-zinc-700">{ranking.leads_cerrados}</p>
+          <p className="font-bold text-sm" style={{ color: '#94A3B8' }}>{ranking.leads_cerrados}</p>
           <p>leads</p>
         </div>
       </div>

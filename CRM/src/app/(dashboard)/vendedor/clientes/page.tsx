@@ -14,46 +14,55 @@ import type { Cliente } from '@/lib/types'
 function ClienteCard({ cliente, onSelect }: { cliente: Cliente; onSelect: (c: Cliente) => void }) {
   return (
     <div
-      className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer"
+      className="rounded-xl p-4 cursor-pointer transition-all duration-200"
+      style={{ background: '#0C1628', border: '1px solid rgba(255,255,255,0.07)' }}
       onClick={() => onSelect(cliente)}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.02)' }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#0C1628' }}
     >
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="font-semibold text-gray-900">
+          <h3 className="font-semibold" style={{ color: '#EEF2FF' }}>
             {cliente.nombre} {cliente.apellido}
           </h3>
           {cliente.localidad && (
-            <p className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
+            <p className="text-sm flex items-center gap-1 mt-0.5" style={{ color: '#475569' }}>
               <MapPin className="h-3 w-3" />
               {cliente.localidad}{cliente.provincia ? `, ${cliente.provincia}` : ''}
             </p>
           )}
         </div>
         {cliente._count && (
-          <div className="flex gap-2 text-xs text-gray-500">
-            <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
+          <div className="flex gap-2 text-xs">
+            <span
+              className="px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(74,144,217,0.15)', color: '#4A90D9' }}
+            >
               {cliente._count.ventas} venta{cliente._count.ventas !== 1 ? 's' : ''}
             </span>
-            <span className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded-full">
+            <span
+              className="px-2 py-0.5 rounded-full"
+              style={{ background: 'rgba(168,85,247,0.15)', color: '#a855f7' }}
+            >
               {cliente._count.consultas} consulta{cliente._count.consultas !== 1 ? 's' : ''}
             </span>
           </div>
         )}
       </div>
       <div className="space-y-1">
-        <p className="text-sm text-gray-600 flex items-center gap-2">
-          <Phone className="h-3.5 w-3.5 text-gray-400" />
+        <p className="text-sm flex items-center gap-2" style={{ color: '#475569' }}>
+          <Phone className="h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
           {cliente.telefono}
         </p>
         {cliente.email && (
-          <p className="text-sm text-gray-600 flex items-center gap-2">
-            <Mail className="h-3.5 w-3.5 text-gray-400" />
+          <p className="text-sm flex items-center gap-2" style={{ color: '#475569' }}>
+            <Mail className="h-3.5 w-3.5" style={{ color: '#2C3E55' }} />
             {cliente.email}
           </p>
         )}
       </div>
       {cliente.notas && (
-        <p className="mt-2 text-xs text-gray-400 line-clamp-2">{cliente.notas}</p>
+        <p className="mt-2 text-xs line-clamp-2" style={{ color: '#2C3E55' }}>{cliente.notas}</p>
       )}
     </div>
   )
@@ -131,12 +140,17 @@ export default function VendedorClientesPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="relative flex-1 max-w-xs">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: '#475569' }} />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por nombre, teléfono..."
-              className="pl-9 pr-3 py-2 w-full rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="pl-9 pr-3 py-2 w-full rounded-lg text-sm focus:outline-none focus:ring-2"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
             />
           </div>
           <Button onClick={() => { setError(''); setModalOpen(true) }}>
@@ -148,7 +162,7 @@ export default function VendedorClientesPage() {
         {loading ? (
           <PageSpinner />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
+          <div className="flex flex-col items-center justify-center py-20 gap-3" style={{ color: '#475569' }}>
             <Users className="h-10 w-10 opacity-30" />
             <p>{search ? 'Sin resultados' : 'No tenés clientes cargados aún'}</p>
           </div>
@@ -176,16 +190,21 @@ export default function VendedorClientesPage() {
           </div>
           <Input label="Fecha de nacimiento (opcional)" type="date" value={form.fechaNacimiento} onChange={set('fechaNacimiento')} />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700">Notas (opcional)</label>
+            <label className="text-sm font-medium" style={{ color: '#EEF2FF' }}>Notas (opcional)</label>
             <textarea
               value={form.notas}
               onChange={set('notas')}
               rows={3}
               placeholder="Información adicional del cliente..."
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="block w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
             />
           </div>
-          {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+          {error && <p className="text-sm text-red-400 bg-red-900/20 px-3 py-2 rounded-lg">{error}</p>}
           <div className="flex gap-3 pt-1">
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)} className="flex-1">
               Cancelar

@@ -79,11 +79,12 @@ export default function AdminDocumentosPage() {
               <button
                 key={t.value}
                 onClick={() => setFiltroTipo(t.value)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+                style={
                   filtroTipo === t.value
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-                }`}
+                    ? { background: '#4A90D9', color: 'white', border: '1px solid #4A90D9' }
+                    : { background: '#12213A', color: '#475569', border: '1px solid rgba(255,255,255,0.07)' }
+                }
               >
                 {t.label}
               </button>
@@ -98,11 +99,11 @@ export default function AdminDocumentosPage() {
         {loading ? (
           <PageSpinner />
         ) : documentos.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+          <div className="flex flex-col items-center justify-center py-20" style={{ color: '#475569' }}>
             <p>No hay documentos aún</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-2">
             {documentos.map((doc) => (
               <DocumentoCard key={doc.id} documento={doc} canDelete onDelete={handleEliminar} />
             ))}
@@ -120,11 +121,16 @@ export default function AdminDocumentosPage() {
             required
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700">Tipo</label>
+            <label className="text-sm font-medium" style={{ color: '#EEF2FF' }}>Tipo</label>
             <select
               value={form.tipo}
               onChange={(e) => setForm((p) => ({ ...p, tipo: e.target.value as TipoDocumento }))}
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
             >
               {TIPOS_FORM.map((t) => (
                 <option key={t.value} value={t.value}>{t.label}</option>
@@ -145,7 +151,7 @@ export default function AdminDocumentosPage() {
             onChange={(e) => setForm((p) => ({ ...p, descripcion: e.target.value }))}
             placeholder="Breve descripción del contenido..."
           />
-          {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+          {error && <p className="text-sm text-red-400 bg-red-900/20 px-3 py-2 rounded-lg">{error}</p>}
           <div className="flex gap-3 pt-1">
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)} className="flex-1">
               Cancelar

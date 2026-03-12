@@ -20,10 +20,10 @@ const TIPO_LABELS: Record<ConsultaTipo, string> = {
 }
 
 const ESTADO_COLORS: Record<ConsultaEstado, string> = {
-  pendiente: 'bg-yellow-100 text-yellow-700',
-  en_proceso: 'bg-blue-100 text-blue-700',
-  resuelta: 'bg-green-100 text-green-700',
-  cancelada: 'bg-gray-100 text-gray-500',
+  pendiente: 'bg-yellow-900/30 text-yellow-400',
+  en_proceso: 'bg-blue-900/30 text-blue-400',
+  resuelta: 'bg-green-900/30 text-green-400',
+  cancelada: 'bg-zinc-800 text-zinc-400',
 }
 
 const ESTADO_LABELS: Record<ConsultaEstado, string> = {
@@ -51,19 +51,22 @@ function ConsultaCard({
   const [resolucion, setResolucion] = useState('')
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div
+      className="rounded-xl p-4"
+      style={{ background: '#0C1628', border: '1px solid rgba(255,255,255,0.07)' }}
+    >
       <div className="flex items-start justify-between mb-2">
         <div>
-          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <span className="text-xs font-medium uppercase tracking-wide" style={{ color: '#475569' }}>
             {TIPO_LABELS[consulta.tipo]}
           </span>
           {consulta.cliente && (
-            <p className="text-sm font-semibold text-gray-900 mt-0.5">
+            <p className="text-sm font-semibold mt-0.5" style={{ color: '#EEF2FF' }}>
               {consulta.cliente.nombre} {consulta.cliente.apellido}
             </p>
           )}
           {consulta.lead && !consulta.cliente && (
-            <p className="text-sm font-semibold text-gray-900 mt-0.5">
+            <p className="text-sm font-semibold mt-0.5" style={{ color: '#EEF2FF' }}>
               Lead: {consulta.lead.nombre} {consulta.lead.apellido}
             </p>
           )}
@@ -73,15 +76,15 @@ function ConsultaCard({
         </span>
       </div>
 
-      <p className="text-sm text-gray-700 mb-3">{consulta.descripcion}</p>
+      <p className="text-sm mb-3" style={{ color: '#CBD5E1' }}>{consulta.descripcion}</p>
 
       {consulta.resolucion && (
-        <p className="text-sm text-green-700 bg-green-50 rounded-lg px-3 py-2 mb-3">
+        <p className="text-sm rounded-lg px-3 py-2 mb-3" style={{ color: '#7FC136', background: 'rgba(127,193,54,0.08)', border: '1px solid rgba(127,193,54,0.15)' }}>
           ✓ {consulta.resolucion}
         </p>
       )}
 
-      <p className="text-xs text-gray-400 mb-3">
+      <p className="text-xs mb-3" style={{ color: '#2C3E55' }}>
         {new Date(consulta.createdAt).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' })}
       </p>
 
@@ -94,7 +97,12 @@ function ConsultaCard({
                 onChange={(e) => setResolucion(e.target.value)}
                 placeholder="Describí la resolución..."
                 rows={2}
-                className="w-full text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 resize-none"
+                style={{
+                  background: '#12213A',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  color: '#EEF2FF',
+                }}
               />
               <div className="flex gap-2">
                 <Button
@@ -195,11 +203,12 @@ export default function VendedorConsultasPage() {
               <button
                 key={f.value}
                 onClick={() => setFiltro(f.value)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+                style={
                   filtro === f.value
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-                }`}
+                    ? { background: '#4A90D9', color: 'white', border: '1px solid #4A90D9' }
+                    : { background: '#12213A', color: '#475569', border: '1px solid rgba(255,255,255,0.07)' }
+                }
               >
                 {f.label}
               </button>
@@ -214,7 +223,7 @@ export default function VendedorConsultasPage() {
         {loading ? (
           <PageSpinner />
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
+          <div className="flex flex-col items-center justify-center py-20 gap-3" style={{ color: '#475569' }}>
             <MessageSquare className="h-10 w-10 opacity-30" />
             <p>No hay consultas {filtro ? `en estado "${ESTADO_LABELS[filtro]}"` : 'registradas'}</p>
           </div>
@@ -230,11 +239,16 @@ export default function VendedorConsultasPage() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Nueva consulta" size="lg">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700">Cliente (opcional)</label>
+            <label className="text-sm font-medium" style={{ color: '#EEF2FF' }}>Cliente (opcional)</label>
             <select
               value={form.clienteId}
               onChange={(e) => setForm((p) => ({ ...p, clienteId: e.target.value }))}
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
             >
               <option value="">Sin cliente asignado</option>
               {clientes.map((c) => (
@@ -244,11 +258,16 @@ export default function VendedorConsultasPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700">Tipo</label>
+            <label className="text-sm font-medium" style={{ color: '#EEF2FF' }}>Tipo</label>
             <select
               value={form.tipo}
               onChange={(e) => setForm((p) => ({ ...p, tipo: e.target.value as ConsultaTipo }))}
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="block w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
             >
               {Object.entries(TIPO_LABELS).map(([v, l]) => (
                 <option key={v} value={v}>{l}</option>
@@ -257,18 +276,23 @@ export default function VendedorConsultasPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700">Descripción</label>
+            <label className="text-sm font-medium" style={{ color: '#EEF2FF' }}>Descripción</label>
             <textarea
               value={form.descripcion}
               onChange={(e) => setForm((p) => ({ ...p, descripcion: e.target.value }))}
               rows={4}
               placeholder="Describí el motivo de la consulta..."
               required
-              className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="block w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
+              style={{
+                background: '#12213A',
+                border: '1px solid rgba(255,255,255,0.07)',
+                color: '#EEF2FF',
+              }}
             />
           </div>
 
-          {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
+          {error && <p className="text-sm text-red-400 bg-red-900/20 px-3 py-2 rounded-lg">{error}</p>}
           <div className="flex gap-3 pt-1">
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)} className="flex-1">
               Cancelar

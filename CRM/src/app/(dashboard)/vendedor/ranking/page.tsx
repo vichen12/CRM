@@ -58,8 +58,8 @@ export default function VendedorRankingPage() {
         <div
           className="rounded-2xl p-6 relative overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #131314 0%, #1e2a3a 100%)',
-            border: '1px solid rgba(255,255,255,0.06)',
+            background: 'linear-gradient(135deg, #0C1628 0%, #12213A 100%)',
+            border: '1px solid rgba(255,255,255,0.07)',
           }}
         >
           <div className="flex items-center justify-between gap-4">
@@ -72,7 +72,7 @@ export default function VendedorRankingPage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Ranking mensual</h2>
-                <div className="flex items-center gap-1.5 mt-0.5 text-zinc-400 text-sm">
+                <div className="flex items-center gap-1.5 mt-0.5 text-sm" style={{ color: '#475569' }}>
                   <Calendar className="h-3.5 w-3.5" />
                   {getMesNombre(mes)} {anio}
                 </div>
@@ -86,7 +86,7 @@ export default function VendedorRankingPage() {
               >
                 <p className="text-xs text-amber-400 font-semibold uppercase tracking-wider">Tu posición</p>
                 <p className="text-3xl font-black text-amber-400">#{myRank.posicion ?? '—'}</p>
-                <p className="text-xs text-zinc-400">{myRank.puntos} pts</p>
+                <p className="text-xs" style={{ color: '#475569' }}>{myRank.puntos} pts</p>
               </div>
             )}
           </div>
@@ -97,14 +97,17 @@ export default function VendedorRankingPage() {
           <PageSpinner />
         ) : rankings.length === 0 ? (
           <div
-            className="flex flex-col items-center justify-center py-20 rounded-2xl bg-white"
-            style={{ border: '1px solid rgba(0,0,0,0.06)' }}
+            className="flex flex-col items-center justify-center py-20 rounded-2xl"
+            style={{ background: '#0C1628', border: '1px solid rgba(255,255,255,0.07)' }}
           >
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'rgba(245,158,11,0.08)' }}>
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
+              style={{ background: 'rgba(245,158,11,0.08)' }}
+            >
               <Trophy className="h-8 w-8 text-amber-400" />
             </div>
-            <p className="text-zinc-500 font-medium">No hay ranking activo para este mes</p>
-            <p className="text-zinc-400 text-xs mt-1">El admin debe crear un periodo de ranking</p>
+            <p className="font-medium" style={{ color: '#475569' }}>No hay ranking activo para este mes</p>
+            <p className="text-xs mt-1" style={{ color: '#2C3E55' }}>El admin debe crear un periodo de ranking</p>
           </div>
         ) : (
           <>

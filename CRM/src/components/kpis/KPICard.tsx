@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils/cn'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -13,13 +12,13 @@ interface KPICardProps {
   color?: Color
 }
 
-const colorMap: Record<Color, { gradient: string; glow: string; iconBg: string; iconColor: string; bar: string }> = {
-  blue:   { gradient: 'from-[#2A79C2] to-[#1a5fa0]', glow: 'rgba(42,121,194,0.15)', iconBg: 'rgba(42,121,194,0.1)', iconColor: '#2A79C2', bar: '#2A79C2' },
-  green:  { gradient: 'from-[#8BC440] to-[#6fa832]',  glow: 'rgba(139,196,64,0.15)', iconBg: 'rgba(139,196,64,0.1)', iconColor: '#8BC440',  bar: '#8BC440' },
-  yellow: { gradient: 'from-amber-400 to-amber-500',   glow: 'rgba(251,191,36,0.15)', iconBg: 'rgba(251,191,36,0.1)', iconColor: '#f59e0b',  bar: '#f59e0b' },
-  purple: { gradient: 'from-purple-500 to-purple-700', glow: 'rgba(168,85,247,0.15)', iconBg: 'rgba(168,85,247,0.1)', iconColor: '#a855f7',  bar: '#a855f7' },
-  red:    { gradient: 'from-red-400 to-red-600',       glow: 'rgba(239,68,68,0.15)',  iconBg: 'rgba(239,68,68,0.1)',  iconColor: '#ef4444',  bar: '#ef4444' },
-  cyan:   { gradient: 'from-cyan-400 to-cyan-600',     glow: 'rgba(6,182,212,0.15)',  iconBg: 'rgba(6,182,212,0.1)',  iconColor: '#06b6d4',  bar: '#06b6d4' },
+const colorMap: Record<Color, { accent: string; dim: string; glow: string }> = {
+  blue:   { accent: '#4A90D9', dim: 'rgba(74,144,217,0.12)',   glow: 'rgba(74,144,217,0.08)' },
+  green:  { accent: '#7FC136', dim: 'rgba(127,193,54,0.12)',   glow: 'rgba(127,193,54,0.08)' },
+  yellow: { accent: '#F59E0B', dim: 'rgba(245,158,11,0.12)',   glow: 'rgba(245,158,11,0.08)' },
+  purple: { accent: '#8B5CF6', dim: 'rgba(139,92,246,0.12)',   glow: 'rgba(139,92,246,0.08)' },
+  red:    { accent: '#EF4444', dim: 'rgba(239,68,68,0.12)',    glow: 'rgba(239,68,68,0.08)' },
+  cyan:   { accent: '#06B6D4', dim: 'rgba(6,182,212,0.12)',    glow: 'rgba(6,182,212,0.08)' },
 }
 
 export function KPICard({ title, value, subtitle, icon: Icon, trend, color = 'blue' }: KPICardProps) {
@@ -27,47 +26,79 @@ export function KPICard({ title, value, subtitle, icon: Icon, trend, color = 'bl
 
   return (
     <div
-      className="relative bg-white rounded-2xl overflow-hidden"
+      className="relative rounded-xl p-5 overflow-hidden transition-all duration-200"
       style={{
-        border: '1px solid rgba(0,0,0,0.06)',
-        boxShadow: `0 4px 24px ${c.glow}, 0 1px 4px rgba(0,0,0,0.04)`,
+        background: '#0C1628',
+        border: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: `0 0 0 0 transparent`,
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement
+        el.style.border = `1px solid rgba(255,255,255,0.12)`
+        el.style.boxShadow = `0 8px 32px rgba(0,0,0,0.3)`
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement
+        el.style.border = `1px solid rgba(255,255,255,0.07)`
+        el.style.boxShadow = `0 0 0 0 transparent`
       }}
     >
-      {/* Color bar top */}
-      <div className={`h-[3px] bg-gradient-to-r ${c.gradient}`} />
-
-      <div className="p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{title}</p>
-            <p className="mt-2 text-3xl font-bold text-zinc-900 leading-none tracking-tight">{value}</p>
-            {subtitle && (
-              <p className="mt-1.5 text-xs text-zinc-400">{subtitle}</p>
-            )}
-            {trend !== undefined && (
-              <div className={cn('mt-2 flex items-center gap-1 text-xs font-semibold')}>
-                {trend > 0 ? (
-                  <TrendingUp className="h-3.5 w-3.5 text-[#8BC440]" />
-                ) : trend < 0 ? (
-                  <TrendingDown className="h-3.5 w-3.5 text-red-500" />
-                ) : (
-                  <Minus className="h-3.5 w-3.5 text-zinc-400" />
-                )}
-                <span className={trend > 0 ? 'text-[#8BC440]' : trend < 0 ? 'text-red-500' : 'text-zinc-400'}>
-                  {trend > 0 ? '+' : ''}{trend}% vs mes anterior
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div
-            className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center"
-            style={{ background: c.iconBg }}
-          >
-            <Icon className="h-6 w-6" style={{ color: c.iconColor }} />
-          </div>
+      {/* Top row: label + icon */}
+      <div className="flex items-center justify-between mb-4">
+        <p
+          className="text-xs font-medium uppercase tracking-widest"
+          style={{ color: '#475569', letterSpacing: '0.08em' }}
+        >
+          {title}
+        </p>
+        <div
+          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+          style={{ background: c.dim }}
+        >
+          <Icon className="h-4 w-4" style={{ color: c.accent }} />
         </div>
       </div>
+
+      {/* Value */}
+      <p
+        className="text-3xl font-bold leading-none tracking-tight"
+        style={{ color: '#EEF2FF' }}
+      >
+        {value}
+      </p>
+
+      {/* Subtitle + trend */}
+      <div className="flex items-center justify-between mt-3">
+        {subtitle && (
+          <p className="text-xs" style={{ color: '#2C3E55' }}>{subtitle}</p>
+        )}
+        {trend !== undefined && (
+          <div className="flex items-center gap-1 ml-auto">
+            {trend > 0 ? (
+              <>
+                <TrendingUp className="h-3 w-3" style={{ color: '#7FC136' }} />
+                <span className="text-[11px] font-semibold" style={{ color: '#7FC136' }}>+{trend}%</span>
+              </>
+            ) : trend < 0 ? (
+              <>
+                <TrendingDown className="h-3 w-3" style={{ color: '#EF4444' }} />
+                <span className="text-[11px] font-semibold" style={{ color: '#EF4444' }}>{trend}%</span>
+              </>
+            ) : (
+              <>
+                <Minus className="h-3 w-3" style={{ color: '#475569' }} />
+                <span className="text-[11px] font-semibold" style={{ color: '#475569' }}>0%</span>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Bottom accent line */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-[2px]"
+        style={{ background: `linear-gradient(90deg, ${c.accent}60 0%, transparent 100%)` }}
+      />
     </div>
   )
 }

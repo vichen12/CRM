@@ -39,7 +39,7 @@ export function Modal({ open, onClose, title, children, size = 'md', className }
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
         className="absolute inset-0"
-        style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}
+        style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
         onClick={onClose}
       />
       <div
@@ -47,20 +47,31 @@ export function Modal({ open, onClose, title, children, size = 'md', className }
         aria-modal="true"
         className={cn('relative w-full rounded-2xl overflow-hidden', sizeClasses[size], className)}
         style={{
-          background: 'white',
-          border: '1px solid rgba(0,0,0,0.08)',
-          boxShadow: '0 25px 80px rgba(0,0,0,0.2)',
+          background: '#0C1628',
+          border: '1px solid rgba(255,255,255,0.1)',
+          boxShadow: '0 40px 100px rgba(0,0,0,0.6)',
         }}
       >
         {title && (
           <div
             className="flex items-center justify-between px-6 py-4"
-            style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.07)' }}
           >
-            <h2 className="text-base font-semibold text-zinc-800">{title}</h2>
+            <h2 className="text-base font-semibold" style={{ color: '#EEF2FF' }}>{title}</h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
+              className="w-7 h-7 flex items-center justify-center rounded-lg transition-colors"
+              style={{ color: '#475569' }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'rgba(255,255,255,0.07)'
+                el.style.color = '#94A3B8'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement
+                el.style.background = 'transparent'
+                el.style.color = '#475569'
+              }}
             >
               <X className="h-4 w-4" />
             </button>

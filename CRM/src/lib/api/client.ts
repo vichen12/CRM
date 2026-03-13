@@ -67,7 +67,7 @@ export async function apiFetch<T>(
       res = await fetch(`${API_URL}${path}`, { ...options, headers })
     } else {
       clearTokens()
-      throw new Error('Sesion expirada')
+      throw new Error('UNAUTHORIZED')
     }
   }
 

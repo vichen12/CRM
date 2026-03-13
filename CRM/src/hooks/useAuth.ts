@@ -13,8 +13,13 @@ export function useAuth() {
     try {
       const data = await getMe()
       setProfile(data)
-    } catch {
+    } catch (err: any) {
       setProfile(null)
+      // Solo redirigir al login si la sesión expiró (token inválido)
+      // No redirigir si simplemente no hay sesión (landing page)
+      if (err?.message === 'UNAUTHORIZED' && typeof window !== 'undefined' && window.location.pathname !== '/' && window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     } finally {
       setLoading(false)
     }

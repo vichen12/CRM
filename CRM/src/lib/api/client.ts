@@ -67,7 +67,6 @@ export async function apiFetch<T>(
       res = await fetch(`${API_URL}${path}`, { ...options, headers })
     } else {
       clearTokens()
-      window.location.href = '/login'
       throw new Error('Sesion expirada')
     }
   }

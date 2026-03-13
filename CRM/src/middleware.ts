@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const isLoginPage = pathname === '/login'
+  const isLandingPage = pathname === '/'
   const isPublicAsset = pathname.startsWith('/_next') || pathname.includes('.')
   const isApiRoute = pathname.startsWith('/api')
 
@@ -11,7 +12,7 @@ export function middleware(request: NextRequest) {
   // El token JWT se guarda en cookie desde el cliente al hacer login
   const token = request.cookies.get('access_token')?.value
 
-  if (!token && !isLoginPage) {
+  if (!token && !isLoginPage && !isLandingPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)

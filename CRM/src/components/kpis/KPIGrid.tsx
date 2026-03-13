@@ -1,13 +1,17 @@
-import { DollarSign, Target, TrendingUp, CheckCircle2, BarChart3 } from 'lucide-react'
+import { DollarSign, Target, TrendingUp, CheckCircle2 } from 'lucide-react'
 import { KPICard } from './KPICard'
 import { formatCurrency } from '@/lib/utils/format'
 import type { KPIVendedor } from '@/lib/types'
 
 interface KPIGridProps {
   kpis: KPIVendedor
+  onClickVentas?: () => void
+  onClickComisiones?: () => void
+  onClickLeads?: () => void
+  onClickConversion?: () => void
 }
 
-export function KPIGrid({ kpis }: KPIGridProps) {
+export function KPIGrid({ kpis, onClickVentas, onClickComisiones, onClickLeads, onClickConversion }: KPIGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <KPICard
@@ -16,6 +20,7 @@ export function KPIGrid({ kpis }: KPIGridProps) {
         subtitle="pólizas cerradas"
         icon={CheckCircle2}
         color="green"
+        onClick={onClickVentas}
       />
       <KPICard
         title="Comisiones del mes"
@@ -23,6 +28,7 @@ export function KPIGrid({ kpis }: KPIGridProps) {
         subtitle="ingresos generados"
         icon={DollarSign}
         color="cyan"
+        onClick={onClickComisiones}
       />
       <KPICard
         title="Leads tomados"
@@ -30,6 +36,7 @@ export function KPIGrid({ kpis }: KPIGridProps) {
         subtitle="este mes"
         icon={Target}
         color="purple"
+        onClick={onClickLeads}
       />
       <KPICard
         title="Tasa de conversión"
@@ -37,6 +44,7 @@ export function KPIGrid({ kpis }: KPIGridProps) {
         subtitle="leads → ventas"
         icon={TrendingUp}
         color="yellow"
+        onClick={onClickConversion}
       />
     </div>
   )

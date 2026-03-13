@@ -12,30 +12,20 @@ interface LeadListProps {
   emptyMessage?: string
 }
 
-export function LeadList({
-  leads,
-  loading,
-  showTomar,
-  onTomar,
-  tomarLoadingId,
-  emptyMessage = 'No hay leads disponibles',
-}: LeadListProps) {
+export function LeadList({ leads, loading, showTomar, onTomar, tomarLoadingId, emptyMessage = 'No hay leads disponibles' }: LeadListProps) {
   if (loading) return <PageSpinner />
 
   if (leads.length === 0) {
     return (
       <div
-        className="flex flex-col items-center justify-center py-20 rounded-2xl bg-white"
-        style={{ border: '1px solid rgba(0,0,0,0.06)' }}
+        className="flex flex-col items-center justify-center py-20 rounded-2xl"
+        style={{ background: '#0C1628', border: '1px solid rgba(255,255,255,0.07)' }}
       >
-        <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-          style={{ background: 'rgba(42,121,194,0.08)' }}
-        >
-          <Target className="h-7 w-7" style={{ color: '#2A79C2' }} />
+        <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4" style={{ background: 'rgba(139,92,246,0.1)' }}>
+          <Target className="h-7 w-7" style={{ color: '#8B5CF6' }} />
         </div>
-        <p className="text-zinc-500 font-medium text-sm">{emptyMessage}</p>
-        <p className="text-zinc-400 text-xs mt-1">Intentá cambiando el filtro</p>
+        <p className="font-medium text-sm" style={{ color: '#475569' }}>{emptyMessage}</p>
+        <p className="text-xs mt-1" style={{ color: '#2C3E55' }}>Intentá cambiando el filtro</p>
       </div>
     )
   }
